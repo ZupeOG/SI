@@ -11,6 +11,8 @@ xtabs(~topic, dane)
 str(dane)
 length(dane$topic)
 
+dokladnosc = function(){
+
 idx=sample(2,nrow(dane),replace=T,prob=c(0.8,0.2))
 train=dane[idx==1,]
 test=dane[idx==2,]
@@ -27,10 +29,24 @@ cf
 pcf=cf/sum(cf)
 pcf
 
+return (sum(diag(cf))/sum (cf))
+}
+
+results = replicate(100, dokladnosc())
+
+sr_dokladnosc = mean(results)
+odchylenie = sd(results)
+
+cat("Jakosc klasyfikatora: ", sr_dokladnosc, "\n")
+
+cat("Odchylenie standardowe: ", odchylenie, "\n")
+
 head(dane)
 xtabs(~topic, dane)
 str(dane)
 length(dane$topic)
+
+dokladnosc = function(){
 
 idx=sample(2,nrow(dane),replace=T,prob=c(0.7,0.3))
 train=dane[idx==1,]
@@ -48,10 +64,25 @@ cf
 pcf=cf/sum(cf)
 pcf
 
+return (sum(diag(cf))/sum (cf))
+}
+
+results = replicate(100, dokladnosc())
+
+sr_dokladnosc = mean(results)
+odchylenie = sd(results)
+
+cat("Jakosc klasyfikatora: ", sr_dokladnosc, "\n")
+
+cat("Odchylenie standardowe: ", odchylenie, "\n")
+
+
 head(dane)
 xtabs(~topic, dane)
 str(dane)
 length(dane$topic)
+
+dokladnosc = function(){
 
 idx=sample(2,nrow(dane),replace=T,prob=c(0.9,0.1))
 train=dane[idx==1,]
@@ -68,6 +99,19 @@ cf
 
 pcf=cf/sum(cf)
 pcf
+
+return (sum(diag(cf))/sum (cf))
+}
+
+results = replicate(100, dokladnosc())
+
+sr_dokladnosc = mean(results)
+odchylenie = sd(results)
+
+cat("Jakosc klasyfikatora: ", sr_dokladnosc, "\n")
+
+cat("Odchylenie standardowe: ", odchylenie, "\n")
+
 
 sd(p)
 
@@ -88,7 +132,7 @@ dane$topic <- as.factor(dane$topic)
 table(dane$topic)
 
 set.seed(222)
-ind <- sample(2, nrow(dane), replace = TRUE, prob = c(0.7, 0.3))
+ind <- sample(2, nrow(dane), replace = TRUE, prob = c(0.9, 0.1))
 train <- dane[ind==1,]
 test <- dane[ind==2,]
 
@@ -106,6 +150,9 @@ df=dane
 
 dane$topic <- as.factor(dane$topic)
 table(dane$topic)
+
+odchylenia = apply(dane[, sapply(dane, is.numeric)], 2, sd)
+print(odchylenia)
 
 set.seed(222)
 ind <- sample(2, nrow(dane), replace = TRUE, prob = c(0.8, 0.2))
@@ -129,7 +176,7 @@ dane$topic <- as.factor(dane$topic)
 table(dane$topic)
 
 set.seed(222)
-ind <- sample(2, nrow(dane), replace = TRUE, prob = c(0.9, 0.1))
+ind <- sample(2, nrow(dane), replace = TRUE, prob = c(0.7, 0.3))
 train <- dane[ind==1,]
 test <- dane[ind==2,]
 
@@ -236,6 +283,9 @@ table(test$topic, nnet_predictions_test)
 
 plot(dane)
 
+test_accuracy <- mean(test$topic == nnet_predictions_test)
+cat("Dokładność klasyfikatora na zbiorze testowym: ", test_accuracy, "\n")
+
 
 
 glimpse(my_data)
@@ -276,4 +326,3 @@ table(test$topic, nnet_predictions_test)
 31/nrow(test)  
 
 plot(dane)
-
